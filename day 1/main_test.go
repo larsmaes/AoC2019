@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func Test_calcNeededFuel(t *testing.T) {
+func TestCalcNeededFuel(t *testing.T) {
 	type args struct {
 		mass int
 	}
@@ -27,7 +27,7 @@ func Test_calcNeededFuel(t *testing.T) {
 	}
 }
 
-func Test_calcTotalModuleFuel(t *testing.T) {
+func TestCalcTotalModuleFuel(t *testing.T) {
 	type args struct {
 		mass int
 	}
@@ -50,7 +50,7 @@ func Test_calcTotalModuleFuel(t *testing.T) {
 	}
 }
 
-func Test_main(t *testing.T) {
+func TestMain(t *testing.T) {
 	tests := []struct {
 		name string
 	}{

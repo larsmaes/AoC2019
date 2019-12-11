@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func Test_parseIntcode(t *testing.T) {
+func TestParseIntcode(t *testing.T) {
 	type args struct {
 		intCode string
 		noun    string
@@ -31,7 +31,7 @@ func Test_parseIntcode(t *testing.T) {
 	}
 }
 
-func Test_main(t *testing.T) {
+func TestMain(t *testing.T) {
 	tests := []struct {
 		name string
 	}{
