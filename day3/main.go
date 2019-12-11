@@ -109,10 +109,7 @@ func makeMove(grid map[vector]map[string]int, offset vector, movement movement, 
 				a = make(map[string]int)
 				grid[offset] = a
 			}
-			if grid[offset]["wire"] != pathID {
-				grid[offset]["wire"] += pathID
-				grid[offset]["step"] += i + stepoffset
-			}
+			addWire(grid[offset], pathID, i, stepoffset)
 		case "D":
 			offset.y--
 			a := grid[offset]
@@ -120,10 +117,7 @@ func makeMove(grid map[vector]map[string]int, offset vector, movement movement, 
 				a = make(map[string]int)
 				grid[offset] = a
 			}
-			if grid[offset]["wire"] != pathID {
-				grid[offset]["wire"] += pathID
-				grid[offset]["step"] += i + stepoffset
-			}
+			addWire(grid[offset], pathID, i, stepoffset)
 		case "R":
 			offset.x++
 			a := grid[offset]
@@ -131,10 +125,7 @@ func makeMove(grid map[vector]map[string]int, offset vector, movement movement, 
 				a = make(map[string]int)
 				grid[offset] = a
 			}
-			if grid[offset]["wire"] != pathID {
-				grid[offset]["wire"] += pathID
-				grid[offset]["step"] += i + stepoffset
-			}
+			addWire(grid[offset], pathID, i, stepoffset)
 		case "L":
 			offset.x--
 			a := grid[offset]
@@ -142,10 +133,7 @@ func makeMove(grid map[vector]map[string]int, offset vector, movement movement, 
 				a = make(map[string]int)
 				grid[offset] = a
 			}
-			if grid[offset]["wire"] != pathID {
-				grid[offset]["wire"] += pathID
-				grid[offset]["step"] += i + stepoffset
-			}
+			addWire(grid[offset], pathID, i, stepoffset)
 		}
 
 	}
@@ -153,6 +141,13 @@ func makeMove(grid map[vector]map[string]int, offset vector, movement movement, 
 	stepoffset += i
 
 	return offset, stepoffset
+}
+
+func addWire(gridpoint map[string]int, pathID int, step int, stepoffset int) {
+	if gridpoint["wire"] != pathID {
+		gridpoint["wire"] += pathID
+		gridpoint["step"] += step + stepoffset
+	}
 }
 
 func main() {
