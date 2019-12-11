@@ -21,9 +21,28 @@ type movement struct {
 	distance  int
 }
 
-func findClosestIntersectionDistance(pathA []string, pathB []string) (closestDistance int) {
+type wire struct {
+	crossing int
+	step     int
+}
 
-	distance := findIntersectionDistance(pathA, pathB)
+func findLowestIntersectionStepCount(paths [][]string) (lowestStepcount int) {
+	intersections := findIntersections(paths[0], paths[1])
+
+	var stepcount []int
+
+	for _, v := range intersections {
+		stepcount = append(stepcount, v)
+	}
+
+	sort.Sort(sort.IntSlice(stepcount))
+
+	return stepcount[0]
+}
+
+func findClosestIntersectionDistance(paths [][]string) (closestDistance int) {
+
+	distance := findIntersectionDistance(paths[0], paths[1])
 
 	sort.Sort(sort.IntSlice(distance))
 
@@ -34,30 +53,33 @@ func findIntersectionDistance(pathA []string, pathB []string) (distance []int) {
 
 	intersections := findIntersections(pathA, pathB)
 
-	for _, v := range intersections {
-		distance = append(distance, int(math.Abs(float64(v.x)))+int(math.Abs(float64(v.y))))
+	for k, _ := range intersections {
+		distance = append(distance, int(math.Abs(float64(k.x)))+int(math.Abs(float64(k.y))))
 	}
 
 	return
 }
 
-func findIntersections(pathA []string, pathB []string) (intersections []vector) {
+func findIntersections(pathA []string, pathB []string) (intersections map[vector]int) {
 
-	g := make(map[vector]int)
+	//a := make(map[string]int)
+	g := make(map[vector]map[string]int)
 
 	walkGrid(g, pathA, 1)
 	walkGrid(g, pathB, 2)
 
+	intersections = make(map[vector]int)
+
 	for k, v := range g {
-		if v > 2 {
-			intersections = append(intersections, k)
+		if v["wire"] > 2 {
+			intersections[k] = v["step"]
 		}
 	}
 
 	return
 }
 
-func walkGrid(grid map[vector]int, path []string, pathID int) {
+func walkGrid(grid map[vector]map[string]int, path []string, pathID int) {
 
 	var movements []movement
 
@@ -67,41 +89,70 @@ func walkGrid(grid map[vector]int, path []string, pathID int) {
 	}
 
 	var offset vector = vector{0, 0}
+	stepoffset := 1
 
 	for _, v := range movements {
-		offset = makeMove(grid, offset, v, pathID)
+		offset, stepoffset = makeMove(grid, offset, v, pathID, stepoffset)
 	}
 
 }
 
-func makeMove(grid map[vector]int, offset vector, movement movement, pathID int) vector {
+func makeMove(grid map[vector]map[string]int, offset vector, movement movement, pathID int, stepoffset int) (vector, int) {
 
-	for i := 0; i < movement.distance; i++ {
+	var i int
+	for i = 0; i < movement.distance; i++ {
 		switch movement.direction {
 		case "U":
 			offset.y++
-			if grid[offset] != pathID {
-				grid[offset] = grid[offset] + pathID
+			a := grid[offset]
+			if a == nil {
+				a = make(map[string]int)
+				grid[offset] = a
+			}
+			if grid[offset]["wire"] != pathID {
+				grid[offset]["wire"] += pathID
+				grid[offset]["step"] += i + stepoffset
 			}
 		case "D":
 			offset.y--
-			if grid[offset] != pathID {
-				grid[offset] = grid[offset] + pathID
+			a := grid[offset]
+			if a == nil {
+				a = make(map[string]int)
+				grid[offset] = a
+			}
+			if grid[offset]["wire"] != pathID {
+				grid[offset]["wire"] += pathID
+				grid[offset]["step"] += i + stepoffset
 			}
 		case "R":
 			offset.x++
-			if grid[offset] != pathID {
-				grid[offset] = grid[offset] + pathID
+			a := grid[offset]
+			if a == nil {
+				a = make(map[string]int)
+				grid[offset] = a
+			}
+			if grid[offset]["wire"] != pathID {
+				grid[offset]["wire"] += pathID
+				grid[offset]["step"] += i + stepoffset
 			}
 		case "L":
 			offset.x--
-			if grid[offset] != pathID {
-				grid[offset] = grid[offset] + pathID
+			a := grid[offset]
+			if a == nil {
+				a = make(map[string]int)
+				grid[offset] = a
+			}
+			if grid[offset]["wire"] != pathID {
+				grid[offset]["wire"] += pathID
+				grid[offset]["step"] += i + stepoffset
 			}
 		}
+
 	}
 
-	return offset
+	stepoffset += i
+
+	return offset, stepoffset
 }
 
 func main() {
@@ -112,15 +163,17 @@ func main() {
 
 	scanner := bufio.NewScanner(file)
 
-	var path [][]string
+	var paths [][]string
 	for scanner.Scan() {
 		movements := strings.Split(scanner.Text(), ",")
 
-		path = append(path, movements)
+		paths = append(paths, movements)
 	}
 
-	distance := findClosestIntersectionDistance(path[0], path[1])
+	distance := findClosestIntersectionDistance(paths)
+	stepcount := findLowestIntersectionStepCount(paths)
 
-	fmt.Printf("Distance to closest intersection: %d", distance)
+	fmt.Printf("Distance to closest intersection: %d\n", distance)
+	fmt.Printf("Lowest stepcount: %d\n", stepcount)
 
 }
