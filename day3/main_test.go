@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func Test_findClosestIntersectionDistance(t *testing.T) {
+func TestFindClosestIntersectionDistance(t *testing.T) {
 	type args struct {
 		pathA []string
 		pathB []string
@@ -23,19 +23,6 @@ func Test_findClosestIntersectionDistance(t *testing.T) {
 			if gotDistance := findClosestIntersectionDistance(tt.args.pathA, tt.args.pathB); gotDistance != tt.wantDistance {
 				t.Errorf("findClosestIntersectionDistance() = %v, want %v", gotDistance, tt.wantDistance)
 			}
-		})
-	}
-}
-
-func Test_main(t *testing.T) {
-	tests := []struct {
-		name string
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			main()
 		})
 	}
 }

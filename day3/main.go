@@ -76,30 +76,24 @@ func walkGrid(grid map[vector]int, path []string, pathID int) {
 
 func makeMove(grid map[vector]int, offset vector, movement movement, pathID int) vector {
 
-	switch movement.direction {
-	case "U":
-		for i := 0; i < movement.distance; i++ {
+	for i := 0; i < movement.distance; i++ {
+		switch movement.direction {
+		case "U":
 			offset.y++
 			if grid[offset] != pathID {
 				grid[offset] = grid[offset] + pathID
 			}
-		}
-	case "D":
-		for i := 0; i < movement.distance; i++ {
+		case "D":
 			offset.y--
 			if grid[offset] != pathID {
 				grid[offset] = grid[offset] + pathID
 			}
-		}
-	case "R":
-		for i := 0; i < movement.distance; i++ {
+		case "R":
 			offset.x++
 			if grid[offset] != pathID {
 				grid[offset] = grid[offset] + pathID
 			}
-		}
-	case "L":
-		for i := 0; i < movement.distance; i++ {
+		case "L":
 			offset.x--
 			if grid[offset] != pathID {
 				grid[offset] = grid[offset] + pathID
