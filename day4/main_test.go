@@ -67,7 +67,7 @@ func TestGetAmountOfMatchingPasswords(t *testing.T) {
 	}
 }
 
-func Test_hasAdjacentDigits(t *testing.T) {
+func TestHasAdjacentDigits(t *testing.T) {
 	type args struct {
 		check int
 	}
