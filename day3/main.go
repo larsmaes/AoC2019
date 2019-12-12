@@ -53,7 +53,7 @@ func findIntersectionDistance(pathA []string, pathB []string) (distance []int) {
 
 	intersections := findIntersections(pathA, pathB)
 
-	for k, _ := range intersections {
+	for k := range intersections {
 		distance = append(distance, int(math.Abs(float64(k.x)))+int(math.Abs(float64(k.y))))
 	}
 
